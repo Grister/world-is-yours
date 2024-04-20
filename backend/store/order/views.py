@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
@@ -32,6 +32,25 @@ class OrderListAllAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
+
+
+class OrderRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        data = request.data
+        if 'status' in data and len(data) == 1:
+            serializer = self.get_serializer(instance, data=data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        else:
+            return Response({'error': 'Only status field can be updated.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CanceledOrderAPIView(APIView):
