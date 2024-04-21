@@ -1,0 +1,34 @@
+[
+  {
+    "model": "product.productcategory",
+    "pk": 1,
+    "fields": {
+      "name": "For you",
+      "name_uk": "Для вас"
+    }
+  },
+  {
+    "model": "product.productcategory",
+    "pk": 2,
+    "fields": {
+      "name": "For the motorhome",
+      "name_uk": "Для автодому"
+    }
+  },
+  {
+    "model": "product.productcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Additional",
+      "name_uk": "Додадкове"
+    }
+  },
+  {
+    "model": "product.productcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Special deals",
+      "name_uk": "Спеціальні пропозиції"
+    }
+  }
+]

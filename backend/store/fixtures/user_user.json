@@ -1,0 +1,92 @@
+[
+    {
+        "model": "user.user",
+        "pk": 1,
+        "fields": {
+            "password": "password123",
+            "email": "user1@example.com",
+            "is_verified_email": true
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 2,
+        "fields": {
+            "password": "password456",
+            "email": "user2@example.com",
+            "is_verified_email": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 3,
+        "fields": {
+            "password": "password789",
+            "email": "user3@example.com",
+            "is_verified_email": true
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 4,
+        "fields": {
+            "password": "passwordabc",
+            "email": "user4@example.com",
+            "is_verified_email": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 5,
+        "fields": {
+            "password": "passworddef",
+            "email": "user5@example.com",
+            "is_verified_email": true
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 6,
+        "fields": {
+            "password": "passwordghi",
+            "email": "user6@example.com",
+            "is_verified_email": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 7,
+        "fields": {
+            "password": "passwordjkl",
+            "email": "user7@example.com",
+            "is_verified_email": true
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 8,
+        "fields": {
+            "password": "passwordmno",
+            "email": "user8@example.com",
+            "is_verified_email": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 9,
+        "fields": {
+            "password": "passwordpqr",
+            "email": "user9@example.com",
+            "is_verified_email": true
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 10,
+        "fields": {
+            "password": "passwordstu",
+            "email": "user10@example.com",
+            "is_verified_email": false
+        }
+    }
+]
