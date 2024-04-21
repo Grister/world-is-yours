@@ -28,4 +28,5 @@ pgsql/
 
 # static files storage
 /static/*
+/store/static/
 !/static/index.html
