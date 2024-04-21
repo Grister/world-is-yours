@@ -269,14 +269,23 @@ API works on [localhost:8000](http://localhost:8000/)
 - **Method:** `GET`
 - **Description:** List all orders for the logged-in user.
 - **Protection:** IsAuthenticated
-- 
+ 
 ### 10.2 Full List Orders
 - **Endpoint:** `/api/orders/all/`
 - **Method:** `GET`
 - **Description:** List of all orders for admin user.
 - **Protection:** IsAdmin
 
-### 10.3 Create Order
+
+### 10.3 Update Order
+- **Endpoint:** `/api/orders/all/<ind:id>/`
+- **Method:** `PATCH`
+- **Description:** Update order status for admin user.
+- **Protection:** IsAdmin
+- **Parameters:**
+  - status (int): allowed values - 1 (Created), 2 (Paid), 3 (On way), 4 (Delivered), 0 (Canceled).
+
+### 10.4 Create Order
 - **Endpoint:** `/api/payment/`
 - **Method:** `POST`
 - **Description:** Create a new order. Basket history is taken automatically 
@@ -331,7 +340,7 @@ API works on [localhost:8000](http://localhost:8000/)
 ## 13. Language Switcher
 - **Endpoint:** `/api/language/<str:language>/`
 - **Method:** `GET`
-- - **Description:** Switch content language. Available languages - 'uk', 'en'.
+- **Description:** Switch content language. Available languages - 'uk', 'en'.
 - **Protection:** None
 
 ## 14. Logs
