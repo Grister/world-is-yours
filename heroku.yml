@@ -3,3 +3,5 @@ build:
     web: Dockerfile
 run:
   web: python manage.py runserver 0.0.0.0:$PORT
+  celery:
+    command: celery -A store worker -l info
