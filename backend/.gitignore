@@ -15,7 +15,7 @@ __pycache__
 /.vscode/
 /.idea/
 ../.idea/
-
+/store/.idea/
 # emacs cache and backup files
 \#*\#
 *~
