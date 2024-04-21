@@ -3,5 +3,5 @@ build:
     web: Dockerfile
     worker: Dockerfile
 run:
-  web: python manage.py runserver 0.0.0.0:$PORT
+  web: gunicorn store.wsgi --log-file -
   worker: celery -A store worker -l info
