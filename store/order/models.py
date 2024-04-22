@@ -1,6 +1,6 @@
 import logging
 
-from django.db import models
+from django.db import models, transaction
 from user.models import User
 from product.models import Basket
 
@@ -44,6 +44,11 @@ class Order(models.Model):
             'user': self.initiator,
             'total_sum': float(baskets.total_sum()),
         })
+        with transaction.atomic():
+            for basket in baskets:
+                product = basket.product
+                product.quantity -= basket.quantity
+                product.save()
         baskets.delete()
         self.save()
 
