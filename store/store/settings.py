@@ -35,9 +35,9 @@ DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 
-CSRF_TRUSTED_ORIGINS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
+CSRF_TRUSTED_ORIGINS = ['world-is-yours-d4407070ced1.herokuapp.com']
 CORS_ORIGIN_WHITELIST = (
-  os.environ.get('ALLOWED_HOSTS', 'localhost'),
+  'world-is-yours-d4407070ced1.herokuapp.com',
 )
 
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
