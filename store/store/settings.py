@@ -35,9 +35,9 @@ DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 
-CSRF_TRUSTED_ORIGINS = ['world-is-yours-d4407070ced1.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://world-is-yours-d4407070ced1.herokuapp.com']
 CORS_ORIGIN_WHITELIST = (
-  'world-is-yours-d4407070ced1.herokuapp.com',
+  'https://world-is-yours-d4407070ced1.herokuapp.com',
 )
 
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
@@ -69,7 +69,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
     'django.middleware.locale.LocaleMiddleware',
 ]
 
