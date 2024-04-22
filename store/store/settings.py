@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import dj_database_url
 
-from dotenv import load_dotenv
 from pathlib import Path
 
 from pythonjsonlogger.jsonlogger import JsonFormatter
@@ -24,23 +23,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# Load .env file
-load_dotenv(dotenv_path=BASE_DIR / '.env.dev')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.environ.get('DEBUG', 'False')
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 
-CSRF_TRUSTED_ORIGINS = ['https://world-is-yours-d4407070ced1.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [os.environ.get('DOMAIN_NAME')]
 CORS_ORIGIN_WHITELIST = (
-  'https://world-is-yours-d4407070ced1.herokuapp.com',
+    os.environ.get('DOMAIN_NAME'),
 )
 
-DOMAIN_NAME = os.getenv('DOMAIN_NAME')
+DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 # Application definition
 
@@ -208,9 +205,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
+
 
 STORAGES = {
     "staticfiles": {
@@ -242,17 +237,13 @@ CELERY_RESULT_BACKEND = REDIS_URL
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TSL')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TSL')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # Stripe
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
-
-
-# if DEBUG:
-#     CORS_ALLOW_ALL_ORIGINS = True
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
