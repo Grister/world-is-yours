@@ -34,8 +34,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
-CSRF_TRUSTED_ORIGINS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 
+CSRF_TRUSTED_ORIGINS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
+CORS_ORIGIN_WHITELIST = (
+  os.environ.get('ALLOWED_HOSTS', 'localhost'),
+)
 
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 
@@ -251,5 +254,5 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 
 
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
+# if DEBUG:
+#     CORS_ALLOW_ALL_ORIGINS = True
