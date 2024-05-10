@@ -10,6 +10,7 @@ router = SimpleRouter()
 router.register('products/category', views.ProductCategoryViewSet, 'product_category')
 router.register('products/subcategory', views.ProductSubCategoryViewSet, 'product_subcategory')
 router.register(r'products/subcategory/(?P<sub_id>\d+)/specs', views.SubCategorySpecsViewSet, 'subcategory_specs')
+router.register(r'products/(?P<product_id>\d+)/related_items', views.ProductRelatedItemsViewSet, 'product_related_items'),
 router.register('products/reviews', views.ProductReviewViewSet, 'product_review')
 router.register('products', views.ProductViewSet, 'product')
 router.register('baskets', views.BasketViewSet, 'basket')

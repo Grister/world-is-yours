@@ -26,6 +26,29 @@ class ProductViewSet(ModelViewSet):
         return super().get_permissions()
 
 
+class ProductRelatedItemsViewSet(ModelViewSet):
+    serializer_class = serializers.ProductSerializer
+
+    def get_queryset(self):
+        product_id = self.kwargs.get('product_id')
+        return models.Product.objects.get(pk=product_id).related_products.all()
+
+    def get_permissions(self):
+        if self.request.method not in SAFE_METHODS:
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()
+
+    # def create(self, request, *args, **kwargs):
+    #     subcategory = self.kwargs.get('sub_id')
+    #     request.data["subcategory"] = subcategory
+    #     return super().create(request, *args, **kwargs)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     if 'subcategory' in request.data:
+    #         return Response({'error': 'You cannot change the subcategory.'}, status=status.HTTP_400_BAD_REQUEST)
+    #     return super().update(request, *args, **kwargs)
+
+
 class ProductCategoryViewSet(ModelViewSet):
     queryset = models.ProductCategory.objects.all()
     serializer_class = serializers.ProductCategorySerializer
