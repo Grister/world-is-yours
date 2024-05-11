@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework import status, filters
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
@@ -9,6 +11,8 @@ from product import serializers
 from product.filters import ProductPaginator, ProductFilter
 from product.permissions import CanChangeReview
 from product import models
+
+UserModel = get_user_model()
 
 
 class ProductViewSet(ModelViewSet):
@@ -24,6 +28,16 @@ class ProductViewSet(ModelViewSet):
         if self.request.method not in SAFE_METHODS:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
+
+    def get_object(self):
+        if not self.request.user.is_anonymous:
+            user = self.request.user
+            product_id = self.kwargs.get('pk')
+            product = get_object_or_404(models.Product, id=product_id)
+            viewed_product, created = models.ViewedProduct.objects.get_or_create(user=user, product=product)
+            if not created:
+                viewed_product.save()
+        return super().get_object()
 
 
 class ProductRelatedItemsViewSet(ModelViewSet):

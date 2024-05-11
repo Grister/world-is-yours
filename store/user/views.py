@@ -13,6 +13,9 @@ from user import serializers
 from user.serializers import ContactFormSerializer
 from user.tasks import send_password_change, send_mail_from_contact_us
 
+from product.models import ViewedProduct, Product
+from product.serializers import ProductSerializer
+
 
 class UserListAPIView(ListCreateAPIView):
     queryset = serializers.UserModel.objects.all()
@@ -51,6 +54,24 @@ class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
             user.set_password(serializer.validated_data['password'])
             user.save()
         serializer.save()
+
+
+class ViewedProductListAPIView(APIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return Product.objects.filter(viewedproduct__user_id=user_id)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = ViewedProduct.objects.filter(user_id=kwargs['user_id'])
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserAddressListAPIView(ListCreateAPIView):
