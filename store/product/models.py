@@ -79,6 +79,15 @@ class Product(models.Model):
         return self.productspecs_set.all()
 
 
+class ViewedProduct(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+
 class ProductSpecs(models.Model):
     name = models.CharField(max_length=256, db_index=True)
     value = models.CharField(max_length=256, db_index=True)

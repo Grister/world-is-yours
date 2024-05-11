@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.authtoken import views
 from rest_framework.views import APIView
@@ -12,6 +12,8 @@ from user.permissions import IsOwnerOrReadOnly, IsOwnerOrIsAdmin, IsOwner
 from user import serializers
 from user.serializers import ContactFormSerializer
 from user.tasks import send_password_change, send_mail_from_contact_us
+from product.serializers import ProductSerializer
+from product.models import Product, ViewedProduct
 
 
 class UserListAPIView(ListCreateAPIView):
@@ -51,6 +53,24 @@ class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
             user.set_password(serializer.validated_data['password'])
             user.save()
         serializer.save()
+
+
+class ViewedProductListAPIView(APIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return Product.objects.filter(viewedproduct__user_id=user_id)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = ViewedProduct.objects.filter(user_id=kwargs['user_id'])
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserAddressListAPIView(ListCreateAPIView):
