@@ -48,16 +48,11 @@ class ProductRelatedItemsViewSet(ModelViewSet):
         try:
             related_product_id = request.data["product_id"]
             related_product = models.Product.objects.get(pk=related_product_id)
-        except models.Product.DoesNotExist:
+        except Exception as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         instance.related_products.add(related_product)
-        return super().create(request, *args, **kwargs)
-
-    # def update(self, request, *args, **kwargs):
-    #     if 'subcategory' in request.data:
-    #         return Response({'error': 'You cannot change the subcategory.'}, status=status.HTTP_400_BAD_REQUEST)
-    #     return super().update(request, *args, **kwargs)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class ProductCategoryViewSet(ModelViewSet):
