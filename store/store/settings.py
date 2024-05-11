@@ -33,9 +33,10 @@ DEBUG = os.environ.get('DEBUG', 'False')
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 
 CSRF_TRUSTED_ORIGINS = [os.environ.get('DOMAIN_NAME')]
-CORS_ORIGIN_WHITELIST = (
-    os.environ.get('DOMAIN_NAME'),
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     os.environ.get('DOMAIN_NAME'),
+# )
 
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
