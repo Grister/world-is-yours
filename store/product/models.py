@@ -44,7 +44,9 @@ class Product(models.Model):
     subcategory = models.ForeignKey(to=ProductSubCategory, on_delete=models.PROTECT, db_index=True)
     related_products = models.ManyToManyField('self', blank=True)
     stripe_price_id = models.CharField(max_length=128, null=True, blank=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
+    material = models.TextField(null=True, blank=True)
+    care = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

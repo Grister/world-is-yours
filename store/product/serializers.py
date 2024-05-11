@@ -6,7 +6,7 @@ from product import models
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
-        exclude = "description_uk", "description_en", "name_uk", "name_en"
+        exclude = "description_uk", "description_en", "name_uk", "name_en", "material_uk", "material_en", "care_uk", "care_en"
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
