@@ -31,18 +31,29 @@ class ProductRelatedItemsViewSet(ModelViewSet):
 
     def get_queryset(self):
         product_id = self.kwargs.get('product_id')
-        return models.Product.objects.get(pk=product_id).related_products.all()
+        try:
+            queryset = models.Product.objects.get(pk=product_id).related_products.all()
+        except models.Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return queryset
 
     def get_permissions(self):
         if self.request.method not in SAFE_METHODS:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
 
-    # def create(self, request, *args, **kwargs):
-    #     subcategory = self.kwargs.get('sub_id')
-    #     request.data["subcategory"] = subcategory
-    #     return super().create(request, *args, **kwargs)
-    #
+    def create(self, request, *args, **kwargs):
+        instance = models.Product.objects.get(pk=self.kwargs.get('product_id'))
+
+        try:
+            related_product_id = request.data["product_id"]
+            related_product = models.Product.objects.get(pk=related_product_id)
+        except models.Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        instance.related_products.add(related_product)
+        return super().create(request, *args, **kwargs)
+
     # def update(self, request, *args, **kwargs):
     #     if 'subcategory' in request.data:
     #         return Response({'error': 'You cannot change the subcategory.'}, status=status.HTTP_400_BAD_REQUEST)
