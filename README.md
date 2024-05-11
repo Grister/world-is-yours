@@ -190,6 +190,28 @@ API works on [localhost:8000](http://localhost:8000/)
 - **Description:** Get, update, or delete information for the specified product.
 - **Protection:** IsAdminUser
 
+### 6.4 Related Items
+#### 6.4.1 Related Items List
+- **Endpoint:** `/api/products/<int:product_id>/related_items/`
+- **Method:** `GET`
+- **Description:** Get related products for the specified product.
+- **Protection:** None
+
+#### 6.4.1 Related Items Create
+- **Endpoint:** `/api/products/<int:product_id>/related_items/`
+- **Method:** `POST`
+- **Description:** Create or update related products for the specified product.
+- **Protection:** IsAdminUser
+- **Parameters:**
+  - product_id (integer)
+
+#### 6.4.1 Related Item Delete
+- **Endpoint:** `/api/products/<int:product_id>/related_items/<int:item_id>`
+- **Method:** `DELETE`
+- **Description:** Delete related item for the specified product.
+- **Protection:** IsAdminUser
+
+
 ## 7. Product Specs
 ### 7.1 List Specs
 - **Endpoint:** `/api/products/<int:prod_id>/specs/`
