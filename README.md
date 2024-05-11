@@ -91,7 +91,13 @@ API works on [localhost:8000](http://localhost:8000/)
 - **Description:** Get, update, or delete address for the specified user.
 - **Protection:** IsOwner
 
-### 3.5 Reset Password
+### 3.5 User Viewed Products
+- **Endpoint:** `/api/users/<int:user_id>/viewed_products/`
+- **Method:** `GET` (Get), `DELETE` (Destroy)
+- **Description:** Get or delete viewed products list for the specified user.
+- **Protection:** IsOwner
+
+### 3.6 Reset Password
 - **Endpoint:** `/api/password_reset/`
 - **Method:** `POST`
 - **Description:** Request a password reset
@@ -99,7 +105,7 @@ API works on [localhost:8000](http://localhost:8000/)
 - **Parameters:**
   - email (string)
 
-### 3.6 Contact Us
+### 3.7 Contact Us
 - **Endpoint:** `/api/contact_us/`
 - **Method:** `POST`
 - **Description:** Contact us form
