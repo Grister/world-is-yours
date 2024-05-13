@@ -47,6 +47,7 @@ class Product(models.Model):
     description = models.TextField(null=True, blank=True)
     material = models.TextField(null=True, blank=True)
     care = models.TextField(null=True, blank=True)
+    features = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
