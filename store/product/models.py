@@ -101,6 +101,9 @@ class ProductSpecs(models.Model):
         verbose_name_plural = 'ProductSpecs'
         unique_together = "name", "product_id"
 
+    def __str__(self):
+        return f'{self.name}|{self.product_id.name}'
+
 
 class SubcategorySpecs(models.Model):
     name = models.CharField(max_length=256, db_index=True)
@@ -109,6 +112,9 @@ class SubcategorySpecs(models.Model):
 
     class Meta:
         unique_together = "name", "subcategory"
+
+    def __str__(self):
+        return f'{self.name}|{self.subcategory.name}'
 
 
 class ProductReview(models.Model):
