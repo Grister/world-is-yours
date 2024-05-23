@@ -93,7 +93,7 @@ class ViewedProduct(models.Model):
 
 class ProductSpecs(models.Model):
     name = models.CharField(max_length=256, db_index=True)
-    value = models.CharField(max_length=256, db_index=True)
+    value = models.JSONField(default=list, blank=True, null=True, db_index=True)
     product_id = models.ForeignKey(to=Product, on_delete=models.CASCADE)
 
     class Meta:
