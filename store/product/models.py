@@ -102,7 +102,7 @@ class ProductSpecs(models.Model):
         unique_together = "name", "product_id"
 
     def __str__(self):
-        return f'{self.name}|{self.product.name}'
+        return f'{self.name}|{self.product_id.name}'
 
 
 class SubcategorySpecs(models.Model):
