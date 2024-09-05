@@ -8,7 +8,7 @@ git clone https://github.com/Grister/world-is-yours.git
 ```
 Switch branch
 ```
-git checkout kravchenko-backend
+git checkout production
 ```
 Install [Docker for Desktop](https://docs.docker.com/desktop/install/windows-install/)
 
