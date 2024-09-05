@@ -4,7 +4,7 @@
 
 Clone the repository
 ```
-git clone https://github.com/MargoKis/world-is-yours.git
+git clone https://github.com/Grister/world-is-yours.git
 ```
 Switch branch
 ```
