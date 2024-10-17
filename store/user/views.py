@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.authtoken import views
 from rest_framework.views import APIView
@@ -46,13 +46,6 @@ class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
         if self.request.method in SAFE_METHODS:
             return serializers.UserSerializer
         return serializers.UserUpdateSerializer
-
-    def perform_update(self, serializer):
-        if 'password' in serializer.validated_data:
-            user = self.get_object()
-            user.set_password(serializer.validated_data['password'])
-            user.save()
-        serializer.save()
 
 
 class ViewedProductListAPIView(APIView):
@@ -133,15 +126,17 @@ class PasswordResetView(APIView):
                     user.set_password(serializer.validated_data['password'])
                     user.save()
                     pc_record.delete()
-                    return Response({'message': 'Your password has been changed successfully.'}, status=status.HTTP_200_OK)
+                    return Response({'message': 'Your password has been changed successfully.'},
+                                    status=status.HTTP_200_OK)
                 else:
                     pc_record.delete()
                     return Response({'error': 'This link has expired.'}, status=status.HTTP_400_BAD_REQUEST)
             except EmailPasswordReset.DoesNotExist:
                 return Response({'error': 'Invalid link.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"detail": "Invalid input. Please provide the correct data."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Invalid input. Please provide the correct data."},
+                status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordChangeRequestView(APIView):
@@ -188,9 +183,27 @@ class UserTokenAuth(views.ObtainAuthToken):
             'email': user.email,
             'phone': user.phone,
             'is_verified_email': user.is_verified_email,
-            'image': user.image if user.image else None,
+            'image': user.image.url if user.image else None,
+            'date_of_birth': user.date_of_birth,
             'is_staff': user.is_staff,
             'is_superuser': user.is_superuser
         }
 
         return Response(response_data)
+
+
+#
+# if user and user.is_active:
+#     token, _ = Token.objects.get_or_create(user=user)
+#     return Response({'token': token.key})
+# else:
+#     return Response({'error': 'User is not active or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
+
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = 'http://localhost:8000/api/auth/google/'
+    client_class = OAuth2Client

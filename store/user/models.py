@@ -32,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=150, blank=True)
     phone = models.CharField(max_length=15, blank=True, validators=[MinLengthValidator(8)])
     image = models.ImageField(upload_to='users_images', null=True, blank=True)
+    date_of_birth = models.DateTimeField(null=True, blank=True)
     is_verified_email = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)

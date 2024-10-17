@@ -26,7 +26,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        fields = ["first_name", "last_name", "email", "phone", "password"]
+        fields = ["first_name", "last_name", "email", "phone", "date_of_birth", "image", "password"]
 
     def validate(self, data):
         email = data["email"]
@@ -52,13 +52,27 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        fields = ["id", "first_name", "last_name", "email", "image", "password"]
+        fields = ["id", "first_name", "last_name", "email", "phone", "date_of_birth", "image", "password"]
 
     def validate_email(self, value):
         instance = self.instance
         if instance and instance.email != value and UserModel.objects.filter(email=value).exists():
             raise serializers.ValidationError("This email is already in use.")
         return value
+
+    def validate(self, data):
+        if 'password' in data:
+            validate_password(data['password'])
+        return data
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class PasswordChangeRequestSerializer(serializers.Serializer):
