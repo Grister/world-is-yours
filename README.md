@@ -58,6 +58,8 @@ API works on [localhost:8000](http://localhost:8000/)
   - first_name (string) *optional*
   - last_name (string) *optional*
   - phone (string) *optional*
+  - image (file) *optional*
+  - date_of_birth (datetime 'YYYY-MM-DD') *optional*
   - email (string) 
   - password (string)
 

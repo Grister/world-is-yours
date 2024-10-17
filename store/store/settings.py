@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
-import dj_database_url
 
 from pathlib import Path
 
@@ -21,22 +20,19 @@ from store.logging_formatter import CustomJsonFormatter
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 load_dotenv(dotenv_path=BASE_DIR / '.env.dev')
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False')
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', 'localhost')]
-#
-# CSRF_TRUSTED_ORIGINS = [os.getenv('DOMAIN_NAME')]
-# CORS_ORIGIN_WHITELIST = (
-#     os.getenv('DOMAIN_NAME'),
-# )
+
+CSRF_TRUSTED_ORIGINS = [os.getenv('DOMAIN_NAME')]
+CORS_ORIGIN_WHITELIST = (
+    os.getenv('DOMAIN_NAME'),
+)
 
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 
@@ -49,9 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'rest_framework',
     'rest_framework.authtoken',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'django_extensions',
     'django_celery_results',
@@ -77,6 +82,24 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
+]
+
+SITE_ID = 1
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '234473200576-4b4vinsq2p65cjaga5902hlc95vqfqsf.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+            'secret': SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
+        },
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 LOGGING = {
@@ -186,12 +209,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "user.User"
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
 
-# LANGUAGE_CODE = 'en-us'
-
-# Настройки для django-modeltranslation
+# Settings for django-modeltranslation
 LANGUAGE_CODE = 'en'
 
 gettext = lambda s: s
@@ -224,7 +244,7 @@ STORAGES = {
     }
 }
 
-#AWS Settings
+# AWS Settings
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'local_id')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', 'local_secret')
 AWS_STORAGE_BUCKET_NAME = os.getenv('S3_BUCKET', 'my_backet')
@@ -236,8 +256,6 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = False
-
-# REDIS_URL = os.getenv('REDIS_URL', 'redis_url')
 
 # Celery
 CELERY_BROKER_URL = f'redis://{os.getenv("REDIS_HOST")}:{os.getenv("REDIS_PORT")}/0'

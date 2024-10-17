@@ -40,7 +40,7 @@ services:
 
 
   redis-server:
-    image: redis:latest
+    image: redis:7.4
     container_name: redis-server
     ports:
       - "6379:6379"
