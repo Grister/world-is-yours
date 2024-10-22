@@ -6,6 +6,7 @@ from rest_framework.authtoken import views
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from firebase_admin import auth
 
 from user.models import EmailVerification, EmailPasswordReset, Address, User
 from user.permissions import IsOwnerOrReadOnly, IsOwnerOrIsAdmin, IsOwner
@@ -116,12 +117,15 @@ class EmailVerificationView(APIView):
 
 
 class PasswordResetView(APIView):
-    def post(self, request, email, code):
+    def post(self, request):
         serializer = serializers.PasswordResetSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                pc_record = EmailPasswordReset.objects.get(user__email=email, code=code)
-                user = serializers.UserModel.objects.get(email=email)
+                pc_record = EmailPasswordReset.objects.get(
+                    user__email=request.data['email'],
+                    code=request.data['code']
+                )
+                user = serializers.UserModel.objects.get(email=request.data['email'])
                 if not pc_record.is_expired():
                     user.set_password(serializer.validated_data['password'])
                     user.save()
@@ -130,9 +134,9 @@ class PasswordResetView(APIView):
                                     status=status.HTTP_200_OK)
                 else:
                     pc_record.delete()
-                    return Response({'error': 'This link has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'error': 'This code has expired.'}, status=status.HTTP_400_BAD_REQUEST)
             except EmailPasswordReset.DoesNotExist:
-                return Response({'error': 'Invalid link.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Invalid data.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"detail": "Invalid input. Please provide the correct data."},
@@ -184,7 +188,7 @@ class UserTokenAuth(views.ObtainAuthToken):
             'phone': user.phone,
             'is_verified_email': user.is_verified_email,
             'image': user.image.url if user.image else None,
-            'date_of_birth': user.date_of_birth,
+            'date_of_birth': user.date_of_birth.strftime('%Y-%d-%m') if user.date_of_birth else user.date_of_birth,
             'is_staff': user.is_staff,
             'is_superuser': user.is_superuser
         }
@@ -192,18 +196,27 @@ class UserTokenAuth(views.ObtainAuthToken):
         return Response(response_data)
 
 
-#
-# if user and user.is_active:
-#     token, _ = Token.objects.get_or_create(user=user)
-#     return Response({'token': token.key})
-# else:
-#     return Response({'error': 'User is not active or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
+class SocialAuthAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        token = request.data['token']
+        try:
+            decoded_token = auth.verify_id_token(token)
+            name = decoded_token['name'].split()
+            user, res = serializers.UserModel.objects.get_or_create(
+                email=decoded_token['email']
+            )
 
+            if res:
+                user.is_verified_email = decoded_token['email_verified']
+                user.first_name = name[0]
+                if len(name) >= 2: user.last_name = name[1]
+                user.is_firebase_account = True
+                user.image = decoded_token['picture']
+                user.set_password(decoded_token['uid'])
+                user.save()
 
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-    callback_url = 'http://localhost:8000/api/auth/google/'
-    client_class = OAuth2Client
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+
+        except ValueError:
+            return Response({'message': 'value error'}, status=status.HTTP_400_BAD_REQUEST)

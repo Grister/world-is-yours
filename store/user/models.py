@@ -37,6 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_firebase_account = models.BooleanField(default=False)
 
     objects = MyUserManager()
 

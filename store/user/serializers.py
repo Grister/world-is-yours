@@ -9,9 +9,11 @@ UserModel = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    date_of_birth = serializers.DateTimeField(format='%Y-%d-%m')
+
     class Meta:
         model = UserModel
-        fields = ["id", "first_name", "last_name", "email", "phone"]
+        fields = ["id", "first_name", "last_name", "email", "phone", "date_of_birth", "image"]
 
     def validate_email(self, value):
         instance = self.instance
@@ -88,10 +90,18 @@ class PasswordChangeRequestSerializer(serializers.Serializer):
 
 class PasswordResetSerializer(serializers.Serializer):
     password = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    code = serializers.UUIDField(required=True)
 
     class Meta:
         model = UserModel
-        fields = "password"
+
+    def validate(self, data):
+        email = data["email"]
+        if not UserModel.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                "Please, enter your email address that you use to authorization to our site.")
+        return data
 
 
 class AddressSerializer(serializers.ModelSerializer):
