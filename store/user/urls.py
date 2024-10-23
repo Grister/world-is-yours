@@ -13,7 +13,7 @@ urlpatterns = [
     path('verify-email/<str:email>/<uuid:code>/', views.EmailVerificationView.as_view(), name='email_verification'),
     path("auth/", views.UserTokenAuth.as_view(), name="auth"),
     path('auth/social-login/', views.SocialAuthAPIView.as_view(), name='social_login'),
-    path('password_reset/', views.PasswordChangeRequestView.as_view(), name='reset_password_request'),
+    path('password_reset/<str:email>/<uuid:code>/', views.PasswordChangeRequestView.as_view(), name='reset_password_request'),
     path('password/', views.PasswordResetView.as_view(), name='password_changing'),
     path('contact_us/', views.ContactUsAPIView.as_view(), name='contact_us'),
 ]

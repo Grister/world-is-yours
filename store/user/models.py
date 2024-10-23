@@ -95,7 +95,7 @@ class EmailPasswordReset(models.Model):
 
     def send_verification_email(self):
         link = reverse('user:password_changing', kwargs={'email': self.user.email, 'code': self.code})
-        reset_link = f'{settings.DOMAIN_NAME}{link}'
+        reset_link = f'{settings.FRONTEND_DOMAIN}{link}'
         subject = 'Password Reset for Your World is Yours Account'
 
         html_message = render_to_string('user/email_password_reset.html', {'reset_link': reset_link, 'user': self.user})
