@@ -80,7 +80,6 @@ MIDDLEWARE = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-
     'formatters': {
         'main_format': {
             'format': '{asctime} - {levelname} - {module} - {filename} - {message}',
@@ -90,7 +89,6 @@ LOGGING = {
             '()': CustomJsonFormatter
         }
     },
-
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
@@ -107,7 +105,6 @@ LOGGING = {
             'filename': 'order.info.log'
         },
     },
-
     'loggers': {
         'user_logger': {
             'handlers': ['console', 'user_info'],

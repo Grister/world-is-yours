@@ -216,7 +216,21 @@ class SocialAuthAPIView(APIView):
                 user.save()
 
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
-
+            response_data = {
+                'token': token.key,
+                'user_id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'phone': user.phone,
+                'is_verified_email': user.is_verified_email,
+                'image': user.image.url if user.image else None,
+                'date_of_birth': user.date_of_birth.strftime('%Y-%d-%m') if user.date_of_birth else user.date_of_birth,
+                'is_staff': user.is_staff,
+                'is_superuser': user.is_superuser
+            }
+            return Response(response_data)
         except ValueError:
             return Response({'message': 'value error'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
