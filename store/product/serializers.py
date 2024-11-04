@@ -54,3 +54,11 @@ class BasketSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Basket
         fields = "__all__"
+
+
+class BasketGetSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
+    class Meta:
+        model = models.Basket
+        fields = "__all__"

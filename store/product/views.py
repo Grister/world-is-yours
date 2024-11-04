@@ -215,6 +215,11 @@ class BasketViewSet(ModelViewSet):
     def get_queryset(self):
         return models.Basket.objects.filter(user_id=self.request.user.id)
 
+    def get_serializer_class(self):
+        if self.request.method in SAFE_METHODS:
+            return serializers.BasketGetSerializer
+        return serializers.BasketSerializer
+
     def update(self, request, *args, **kwargs):
         if set(request.data.keys()) == {'quantity'}:
             kwargs['partial'] = True

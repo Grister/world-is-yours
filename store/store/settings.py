@@ -18,7 +18,7 @@ from pythonjsonlogger.jsonlogger import JsonFormatter
 
 from store.logging_formatter import CustomJsonFormatter
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(dotenv_path=BASE_DIR / '.env.dev')
@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False')
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', 'localhost')]
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split()
 
 CSRF_TRUSTED_ORIGINS = [os.getenv('DOMAIN_NAME')]
 CORS_ORIGIN_WHITELIST = (
@@ -38,7 +38,6 @@ DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 FRONTEND_DOMAIN = os.getenv('FRONTEND_DOMAIN')
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,6 +122,8 @@ LOGGING = {
 GEOIP_PATH = BASE_DIR / 'geo_db'
 
 ROOT_URLCONF = 'store.urls'
+
+SITE_ID = 1
 
 TEMPLATES = [
     {
