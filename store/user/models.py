@@ -34,6 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     image = models.ImageField(upload_to='users_images', null=True, blank=True)
     date_of_birth = models.DateTimeField(null=True, blank=True)
     is_verified_email = models.BooleanField(default=False)
+    address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
 
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -45,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     address_line = models.CharField(max_length=100)
     city = models.CharField(max_length=50)
     country = models.CharField(max_length=50)

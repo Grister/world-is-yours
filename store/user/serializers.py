@@ -8,12 +8,19 @@ from user.models import Address
 UserModel = get_user_model()
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
+
+
 class UserSerializer(serializers.ModelSerializer):
     date_of_birth = serializers.DateTimeField(format='%Y-%d-%m')
+    address = AddressSerializer()
 
     class Meta:
         model = UserModel
-        fields = ["id", "first_name", "last_name", "email", "phone", "date_of_birth", "image"]
+        fields = ["id", "first_name", "last_name", "email", "phone", "address", "date_of_birth", "image"]
 
     def validate_email(self, value):
         instance = self.instance
@@ -25,10 +32,11 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True)
+    address = AddressSerializer()
 
     class Meta:
         model = UserModel
-        fields = ["first_name", "last_name", "email", "phone", "date_of_birth", "image", "password"]
+        fields = ["first_name", "last_name", "email", "phone", "date_of_birth", "address", "image", "password"]
 
     def validate(self, data):
         email = data["email"]
@@ -39,7 +47,15 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        return UserModel.objects.create_user(**validated_data)
+        address_data = validated_data.pop('address', None)
+        user_data = UserModel.objects.create_user(**validated_data)
+
+        if address_data:
+            address = Address.objects.create(**address_data)
+            user_data.address = address
+            user_data.save()
+
+        return user_data
 
     def save(self, **kwargs):
         user = super(UserCreateSerializer, self).save(**kwargs)
@@ -51,10 +67,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True)
     image = serializers.ImageField()
+    address = AddressSerializer()
 
     class Meta:
         model = UserModel
-        fields = ["id", "first_name", "last_name", "email", "phone", "date_of_birth", "image", "password"]
+        fields = ["id", "first_name", "last_name", "email", "phone", "address", "date_of_birth", "image", "password"]
 
     def validate_email(self, value):
         instance = self.instance
@@ -68,6 +85,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
+        address_data = validated_data.pop('address', None)
+        if address_data:
+            if instance.address:
+                Address.objects.filter(id=instance.address.id).update(**address_data)
+            else:
+                instance.address = Address.objects.create(**address_data)
+
         for attr, value in validated_data.items():
             if attr == 'password':
                 instance.set_password(value)
@@ -102,12 +126,6 @@ class PasswordResetSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Please, enter your email address that you use to authorization to our site.")
         return data
-
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = "__all__"
 
 
 class ContactFormSerializer(serializers.Serializer):

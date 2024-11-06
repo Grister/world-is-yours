@@ -1,0 +1,42 @@
+[
+  {
+    "model": "user.address",
+    "pk": 1,
+    "fields": {
+        "city": "Berlin",
+        "country": "Germany",
+        "address_line": "Alexanderplatz 5",
+        "zip_code": "10178"
+    }
+  },
+  {
+    "model": "user.address",
+    "pk": 2,
+    "fields": {
+        "city": "Paris",
+        "country": "France",
+        "address_line": "Avenue des Champs-Élysées 10",
+        "zip_code": "75008"
+    }
+  },
+  {
+    "model": "user.address",
+    "pk": 3,
+    "fields": {
+        "city": "New York",
+        "country": "USA",
+        "address_line": "5th Avenue, 100",
+        "zip_code": "10001"
+    }
+  },
+  {
+    "model": "user.address",
+    "pk": 4,
+    "fields": {
+        "city": "London",
+        "country": "United Kingdom",
+        "address_line": "Baker Street 221B",
+        "zip_code": "NW1 6XE"
+    }
+  }
+]

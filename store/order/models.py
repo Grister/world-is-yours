@@ -1,7 +1,7 @@
 import logging
 
 from django.db import models, transaction
-from user.models import User
+from user.models import User, Address
 from product.models import Basket
 
 logger = logging.getLogger('order_logger')
@@ -23,7 +23,7 @@ class Order(models.Model):
 
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-    address = models.CharField(max_length=256)
+    address = models.ForeignKey(to=Address, on_delete=models.SET_NULL, null=True)
     basket_history = models.JSONField(default=dict)
     created = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(default=CREATED, choices=STATUSES)

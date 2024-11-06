@@ -1,4 +1,5 @@
 fixtures/user_user.json
+fixtures/user_address.json
 fixtures/product_category.json
 fixtures/product_subcategory.json
 fixtures/product_product.json
