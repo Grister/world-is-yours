@@ -225,7 +225,7 @@ class SocialAuthAPIView(APIView):
                 'phone': user.phone,
                 'is_verified_email': user.is_verified_email,
                 'image': user.image.url if user.image else None,
-                'date_of_birth': user.date_of_birth.strftime('%Y-%d-%m') if user.date_of_birth else user.date_of_birth,
+                'date_of_birth': user.date_of_birth.strftime('%Y-%m-%d') if user.date_of_birth else user.date_of_birth,
                 'is_staff': user.is_staff,
                 'is_superuser': user.is_superuser
             }
