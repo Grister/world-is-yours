@@ -15,8 +15,8 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    date_of_birth = serializers.DateTimeField(format='%Y-%m-%d')
-    address = AddressSerializer()
+    date_of_birth = serializers.DateTimeField(format='%Y-%m-%d', required=False)
+    address = AddressSerializer(required=False)
 
     class Meta:
         model = UserModel
@@ -32,8 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True)
-    address = AddressSerializer()
-    date_of_birth = serializers.DateTimeField(format='%Y-%m-%d')
+    address = AddressSerializer(required=False)
+    date_of_birth = serializers.DateTimeField(format='%Y-%m-%d', required=False)
 
     class Meta:
         model = UserModel

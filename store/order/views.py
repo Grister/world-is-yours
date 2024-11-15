@@ -5,8 +5,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+import django_filters.rest_framework as dj_filters
 
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -16,6 +17,8 @@ from order.models import Order
 from product.models import Basket
 from order.serializers import OrderSerializer
 from order.exceptions import EmptyBasketException
+from order.filters import OrderFilter
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -32,6 +35,10 @@ class OrderListAllAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
+
+    filter_backends = [filters.OrderingFilter, dj_filters.DjangoFilterBackend]
+    ordering_fields = ['created']
+    filterset_class = OrderFilter
 
 
 class OrderRetrieveUpdateAPIView(RetrieveUpdateAPIView):

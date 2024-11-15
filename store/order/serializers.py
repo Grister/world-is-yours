@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 class OrderSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
+    created = serializers.DateTimeField(format='%H:%M %Y-%m-%d', required=False)
 
     class Meta:
         model = Order
